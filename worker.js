@@ -45,7 +45,7 @@ async function handleChat(request, env, cors) {
       messages: [
         {
           role: "system",
-          content: "You are Neora, a helpful programming assistant. Your model identity label is Exotic. Help with programming, debugging, code explanations, and software design. Give accurate practical answers and use fenced code blocks. If unsure, say so. Never claim you executed or tested code unless you actually did.",
+          content: "You are Nexora, a helpful programming assistant. Your model identity label is Exotic. Help with programming, debugging, code explanations, and software design. Give accurate practical answers and use fenced code blocks. If unsure, say so. Never claim you executed or tested code unless you actually did.",
         },
         ...messages,
       ],
@@ -57,7 +57,7 @@ async function handleChat(request, env, cors) {
     if (typeof reply !== "string" || !reply.trim()) {
       return json({ error: "The AI model returned an empty response." }, 502, cors);
     }
-    return json({ name: "Neora", model: MODEL_LABEL, reply: reply.trim() }, 200, cors);
+    return json({ name: "Nexora", model: MODEL_LABEL, reply: reply.trim() }, 200, cors);
   } catch (error) {
     return json({ error: "Workers AI request failed.", details: String(error?.message || error).slice(0, 500) }, 502, cors);
   }
@@ -70,7 +70,7 @@ export default {
 
     const url = new URL(request.url);
     if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/health")) {
-      return json({ name: "Neora", project: "Nexora", model: MODEL_LABEL, model_id: MODEL_ID, status: "online", endpoints: { health: "GET /health", chat: "POST /chat" } }, 200, cors);
+      return json({ name: "Nexora", project: "Nexora", model: MODEL_LABEL, model_id: MODEL_ID, status: "online", endpoints: { health: "GET /health", chat: "POST /chat" } }, 200, cors);
     }
     if (request.method === "POST" && url.pathname === "/chat") return handleChat(request, env, cors);
     return json({ error: "Not found. Use GET /health or POST /chat." }, 404, cors);
