@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090b12">
-  <meta name="description" content="Neora — a programming assistant by Nexora, powered by GLM-4.7-Flash on Cloudflare Workers AI.">
-  <title>Neora — Nexora</title>
+  <meta name="description" content="Nexora — a programming assistant by Nexora, powered by GLM-4.7-Flash on Cloudflare Workers AI.">
+  <title>Nexora — Nexora</title>
   <style>
     :root{color-scheme:dark;--bg:#090b12;--panel:#101522;--panel2:#151c2b;--line:#252e40;--text:#edf2ff;--muted:#8d9ab2;--accent:#8b7cff;--accent2:#5ed6c1;--danger:#ff8585}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#24204a 0,transparent 38%),radial-gradient(ellipse at 100% 90%,#10343b 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
@@ -22,14 +22,14 @@
 <body>
   <div class="app">
     <header>
-      <div class="brand"><div class="logo">N</div><div><h1>Neora</h1><p>Programming intelligence · Nexora</p></div></div>
+      <div class="brand"><div class="logo">N</div><div><h1>Nexora</h1><p>Programming intelligence · Nexora</p></div></div>
       <div class="status"><span class="dot" id="dot"></span><span id="statusText">Connecting…</span></div>
     </header>
     <main>
       <section class="welcome" id="welcome">
         <div class="orb">⌘</div>
         <h2>Build something brilliant.</h2>
-        <p>Ask Neora to write code, explain concepts, or help debug a project.</p>
+        <p>Ask Nexora to write code, explain concepts, or help debug a project.</p>
         <div class="suggestions">
           <button data-prompt="Write a responsive HTML landing page.">Create a website</button>
           <button data-prompt="Explain JavaScript promises with a simple example.">Explain a concept</button>
@@ -39,14 +39,14 @@
       <section id="chat" aria-live="polite"></section>
       <div class="composer">
         <div class="inputbox">
-          <textarea id="prompt" rows="1" placeholder="Message Neora…" aria-label="Message Neora"></textarea>
+          <textarea id="prompt" rows="1" placeholder="Message Nexora…" aria-label="Message Nexora"></textarea>
           <div class="controls"><span class="hint">Enter to send · Shift + Enter for a new line</span><div class="actions"><button class="action" id="clearBtn" type="button">New chat</button><button class="send" id="sendBtn" type="button" disabled>Send ↗</button></div></div>
         </div>
       </div>
     </main>
     <footer class="footer">
       Model credit: <strong>GLM-4.7-Flash</strong> by <strong>Zhipu AI</strong> · Hosted with <strong>Cloudflare Workers AI</strong>.<br>
-      Neora is the Nexora assistant interface. Model availability and usage are subject to Cloudflare's terms and pricing.
+      Nexora is the Nexora assistant interface. Model availability and usage are subject to Cloudflare's terms and pricing.
       <br><a href="https://developers.cloudflare.com/workers-ai/models/glm-4.7-flash/" target="_blank" rel="noopener">Model details</a> · <a href="https://www.zhipuai.cn/" target="_blank" rel="noopener">Zhipu AI</a>
     </footer>
   </div>
@@ -79,6 +79,17 @@
     blocks.forEach((block, i) => { safe = safe.replace("BLOCK" + i + "TOKEN", block); });
     return safe;
   }
+  function downloadCodeFile(source, index) {
+    const blob = new Blob([source], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "nexora-code-" + (index + 1) + ".txt";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
   function addMessage(role, content) {
     const item = document.createElement("article");
     item.className = "message " + role;
@@ -89,10 +100,23 @@
     bubble.className = "bubble";
     const who = document.createElement("div");
     who.className = "who";
-    who.textContent = role === "user" ? "You" : "Neora";
+    who.textContent = role === "user" ? "You" : "Nexora";
     const body = document.createElement("div");
     body.className = "content";
     body.innerHTML = renderMarkdown(content);
+    body.querySelectorAll("pre").forEach((pre, index) => {
+      const code = pre.querySelector("code");
+      if (!code) return;
+      const tools = document.createElement("div");
+      tools.className = "code-tools";
+      const download = document.createElement("button");
+      download.type = "button";
+      download.className = "download-code";
+      download.textContent = "Get full code file ↓";
+      download.addEventListener("click", () => downloadCodeFile(code.textContent || "", index));
+      tools.append(download);
+      pre.after(tools);
+    });
     bubble.append(who, body);
     item.append(avatar, bubble);
     chat.append(item);
@@ -123,7 +147,7 @@
     sendBtn.textContent = "Thinking…";
     const typing = document.createElement("div");
     typing.className = "typing";
-    typing.textContent = "Neora is thinking…";
+    typing.textContent = "Nexora is thinking…";
     chat.append(typing);
     try {
       const response = await fetch(API + "/chat", {
