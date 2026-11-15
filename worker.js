@@ -10,16 +10,12 @@ function json(data, status = 200, headers = {}) {
   });
 }
 
-function getCorsHeaders(request, env) {
-  const origin = request.headers.get("Origin");
-  const allowedOrigins = (env.ALLOWED_ORIGIN || "*").split(",").map((v) => v.trim()).filter(Boolean);
-  const allowed = allowedOrigins.includes("*") || (origin && allowedOrigins.includes(origin));
+function getCorsHeaders() {
   return {
-    "Access-Control-Allow-Origin": allowed ? (allowedOrigins.includes("*") ? "*" : origin) : "null",
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
-    "Vary": "Origin",
   };
 }
 
@@ -69,12 +65,7 @@ async function handleChat(request, env, cors) {
 
 export default {
   async fetch(request, env) {
-    const cors = getCorsHeaders(request, env);
-    const origin = request.headers.get("Origin");
-    const allowedOrigins = (env.ALLOWED_ORIGIN || "*").split(",").map((v) => v.trim()).filter(Boolean);
-    if (origin && !allowedOrigins.includes("*") && !allowedOrigins.includes(origin)) {
-      return json({ error: "Origin not allowed." }, 403, cors);
-    }
+    const cors = getCorsHeaders();
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
     const url = new URL(request.url);
