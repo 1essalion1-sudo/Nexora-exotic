@@ -1,8 +1,8 @@
-# Nexora — Neora
+# Nexora
 
 A prototype programming assistant website powered by **Cloudflare Workers AI**.
 
-- **Assistant:** Neora
+- **Assistant:** Nexora
 - **Project:** Nexora
 - **Model:** GLM-4.7-Flash by Zhipu AI
 - **Inference platform:** Cloudflare Workers AI
@@ -22,7 +22,7 @@ This prototype uses **GLM-4.7-Flash**, developed by **Zhipu AI** and served thro
 - [Cloudflare Workers AI model documentation](https://developers.cloudflare.com/workers-ai/models/glm-4.7-flash/)
 - [Zhipu AI](https://www.zhipuai.cn/)
 
-Neora is the assistant/interface name used by this project; it is not the name of the underlying foundation model.
+Nexora is the assistant/interface name used by this project; it is not the name of the underlying foundation model.
 
 ## Publish with GitHub Pages
 
