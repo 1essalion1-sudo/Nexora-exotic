@@ -1,40 +1,40 @@
-# Nexora — Neora Backend
+# Nexora — Neora
 
-A small Cloudflare Worker backend for **Neora**, the programming assistant. It connects to an OpenAI-compatible chat-completions API. The model label defaults to **Exotic**.
+A prototype programming assistant website powered by **Cloudflare Workers AI**.
 
-## Endpoints
+- **Assistant:** Neora
+- **Project:** Nexora
+- **Model:** GLM-4.7-Flash by Zhipu AI
+- **Inference platform:** Cloudflare Workers AI
 
-- `GET /health` — health check.
-- `POST /chat` — send conversation messages.
+## Website
 
-Example request:
+The static website is `index.html`. It connects to the deployed Worker at:
 
-```json
-{
-  "messages": [
-    { "role": "user", "content": "Write a JavaScript hello world." }
-  ]
-}
-```
+`https://nexora-exotic.1essalion1.workers.dev`
 
-Example response:
+The browser sends chat messages to `POST /chat` and checks `GET /health`.
 
-```json
-{
-  "name": "Neora",
-  "model": "Exotic",
-  "reply": "..."
-}
-```
+## Model credit
 
-## Deploy on Cloudflare Workers
+This prototype uses **GLM-4.7-Flash**, developed by **Zhipu AI** and served through **Cloudflare Workers AI**.
 
-1. Create a Worker and paste the contents of `worker.js`, or deploy this folder with Wrangler.
-2. In Worker Settings → Variables and Secrets, set:
-   - `MODEL_BASE_URL`: provider base URL (without `/chat/completions`).
-   - `MODEL_NAME`: exact model ID supplied by the provider.
-   - `MODEL_API_KEY`: optional secret if the provider requires a key.
-3. Set `ALLOWED_ORIGIN` to your frontend's exact origin before public launch. The current `*` value is only for initial testing.
-4. Test `/health`, then send a POST request to `/chat`.
+- [Cloudflare Workers AI model documentation](https://developers.cloudflare.com/workers-ai/models/glm-4.7-flash/)
+- [Zhipu AI](https://www.zhipuai.cn/)
 
-**Important:** “Exotic” is currently the model label, not a verified provider/model ID. The backend uses the OpenAI-compatible Chat Completions format. We need the actual Exotic provider endpoint and model ID before real AI replies can work. Never put a provider API key in frontend code or commit it to GitHub.
+Neora is the assistant/interface name used by this project; it is not the name of the underlying foundation model.
+
+## Publish with GitHub Pages
+
+1. Open the repository's **Settings → Pages**.
+2. Under Build and deployment, choose **Deploy from a branch**.
+3. Select branch `main` and folder `/ (root)`, then save.
+4. Wait for GitHub Pages to publish the site.
+
+## Backend
+
+The Worker source is `worker.js`; Wrangler configuration is `wrangler.toml`. The Worker requires a Cloudflare Workers AI binding named `AI`.
+
+Before public launch, replace `ALLOWED_ORIGIN = "*"` in the Worker configuration with the exact published website origin and redeploy.
+
+This is an early prototype. More features and design changes will be added later.
