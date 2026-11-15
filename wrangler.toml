@@ -1,0 +1,7 @@
+name = "nexora-neora-backend"
+main = "worker.js"
+compatibility_date = "2026-11-15"
+
+[vars]
+MODEL_NAME = "Exotic"
+ALLOWED_ORIGIN = "*"
